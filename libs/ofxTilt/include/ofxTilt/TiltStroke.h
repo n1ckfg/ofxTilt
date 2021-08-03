@@ -14,9 +14,6 @@ class TiltStroke {
         void update();
         void draw();
         void run();
-        void splitStroke();
-        void smoothStroke();
-        void refine();
     
         vector<ofVec3f> points;
         float strokeSize = 4.0;

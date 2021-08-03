@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "TiltJson.h"
+#include "TiltStroke.h"
 
 class TiltLoader {
 
@@ -10,22 +11,29 @@ class TiltLoader {
 		TiltLoader(string fileName);
 		virtual ~TiltLoader() {};
 
-		void run();
-		bool checkInterval();
-		void read(string fileName, bool clearExisting);
-		void write(string fileName);
+		void read(string fileName);
 
+        string url;
 		TiltJson json;
+        vector<byte> bytes;
+        int numStrokes;
+        vector<TiltStroke> strokes;
+    
+    
+    private:
+        void parseTilt();
+    
+        int getUInt(vector<byte> _bytes, int _offset);
+        int getInt(vector<byte> _bytes, int _offset);
+        float getFloat(vector<byte> _bytes, int _offset);
 
-		string fileName = "layer_test";
-		float globalScale = 100.0;
-		bool drawMesh = false;
-		int startTime = 0;
-		int lastMillis = 0;
-		int timeInterval = 0;
-		float fps = 12.0;
-		int fpsInterval = int((1.0 / fps) * 1000.0);
+        int asUInt(vector<byte> _bytes);
+        int asInt(vector<byte> _bytes);
+        float asFloat(vector<byte> _bytes);
 
-		int currentLayer = 0;
+        vector<byte> readEntryAsBytes(string entry);
+        string readEntryAsString(string entry);
+    
+        string getFilePath();
 
 };
