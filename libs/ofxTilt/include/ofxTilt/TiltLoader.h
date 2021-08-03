@@ -1,29 +1,22 @@
 #pragma once
 
 #include "ofMain.h"
-#include "LatkJson.h"
-#include "LatkLayer.h"
+#include "TiltJson.h"
 
-class Latk {
+class TiltLoader {
 
 	public:
-		Latk();
-		Latk(string fileName);
-		virtual ~Latk() {};
+		TiltLoader();
+		TiltLoader(string fileName);
+		virtual ~TiltLoader() {};
 
 		void run();
 		bool checkInterval();
 		void read(string fileName, bool clearExisting);
 		void write(string fileName);
 
-		LatkJson json;
-		LatkJson jsonGp;
-		LatkJson jsonLayer;
-		LatkJson jsonFrame;
-		LatkJson jsonStroke;
-		LatkJson jsonPoint;
+		TiltJson json;
 
-		vector<LatkLayer> layers;
 		string fileName = "layer_test";
 		float globalScale = 100.0;
 		bool drawMesh = false;

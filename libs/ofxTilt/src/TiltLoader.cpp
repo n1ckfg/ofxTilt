@@ -1,15 +1,15 @@
-#include "Latk.h"
+#include "TiltLoader.h"
 
-Latk::Latk() { }
+TiltLoader::TiltLoader() { }
 
-Latk::Latk(string fileName) {
+TiltLoader::TiltLoader(string fileName) {
 	read(fileName, true);
 
 	startTime = ofGetElapsedTimeMillis();
-	cout << "Latk strokes loaded.";
+	cout << "Tilt strokes loaded.";
 }
 
-void Latk::run() {
+void TiltLoader::run() {
 	bool advanceFrame = checkInterval();
 
 	for (int i = 0; i<layers.size(); i++) {
@@ -20,7 +20,7 @@ void Latk::run() {
 	lastMillis = ofGetElapsedTimeMillis();
 }
 
-bool Latk::checkInterval() {
+bool TiltLoader::checkInterval() {
 	bool returns = false;
 	timeInterval += ofGetElapsedTimeMillis() - lastMillis;
 	if (timeInterval > fpsInterval) {
@@ -30,7 +30,7 @@ bool Latk::checkInterval() {
 	return returns;
 }
 
-void Latk::read(string fileName, bool clearExisting) {
+void TiltLoader::read(string fileName, bool clearExisting) {
 	if (clearExisting) layers.clear();
 
 	json.open(fileName);
@@ -39,11 +39,11 @@ void Latk::read(string fileName, bool clearExisting) {
 		jsonGp = json["grease_pencil"][h];
 
 		for (int i = 0; i<jsonGp["layers"].size(); i++) {
-			layers.push_back(LatkLayer());
+			layers.push_back(TiltLayer());
 
 			jsonLayer = jsonGp["layers"][i];
 			for (int j = 0; j<jsonLayer["frames"].size(); j++) {
-				layers[layers.size() - 1].frames.push_back(LatkFrame());
+				layers[layers.size() - 1].frames.push_back(TiltFrame());
 
 				jsonFrame = jsonLayer["frames"][j];
 				for (int l = 0; l<jsonFrame["strokes"].size(); l++) {
@@ -61,7 +61,7 @@ void Latk::read(string fileName, bool clearExisting) {
 						pts.push_back(p * globalScale);
 					}
 
-					LatkStroke st = LatkStroke(pts, col);
+					TiltStroke st = TiltStroke(pts, col);
 					st.globalScale = globalScale;
 					st.drawMesh = drawMesh;
 					layers[layers.size() - 1].frames[layers[layers.size() - 1].frames.size() - 1].strokes.push_back(st);
@@ -71,7 +71,7 @@ void Latk::read(string fileName, bool clearExisting) {
 	}
 }
 
-void Latk::write(string fileName) {
+void TiltLoader::write(string fileName) {
 	vector<string> FINAL_LAYER_LIST;
 
 	for (int hh = 0; hh < layers.size(); hh++) {

@@ -26,15 +26,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "LatkZip.h"
+#include "TiltZip.h"
 
-typedef Poco::Delegate<LatkZipArchiveHandler, ZipErrorInfo> error_handler;
-typedef Poco::Delegate<LatkZipArchiveHandler, ZipOkInfo> ok_handler;
-typedef Poco::Delegate<LatkZipArchiveHandler, ZipDoneInfo> done_handler;
+typedef Poco::Delegate<TiltZipArchiveHandler, ZipErrorInfo> error_handler;
+typedef Poco::Delegate<TiltZipArchiveHandler, ZipOkInfo> ok_handler;
+typedef Poco::Delegate<TiltZipArchiveHandler, ZipDoneInfo> done_handler;
 
 
 // ------------------------------------------------------
-bool LatkZip::compress(string folderPath, string zipPath, bool recursive, bool excludeRoot, Poco::Zip::ZipCommon::CompressionLevel cl) {
+bool TiltZip::compress(string folderPath, string zipPath, bool recursive, bool excludeRoot, Poco::Zip::ZipCommon::CompressionLevel cl) {
     
     folderPath = ofToDataPath(folderPath);
     zipPath = ofToDataPath(zipPath);
@@ -43,31 +43,31 @@ bool LatkZip::compress(string folderPath, string zipPath, bool recursive, bool e
     
     std::ofstream outfile(zipPath.c_str(), ios::binary);
     if (!outfile.good()) {
-        ofLogError("LatkZip") << "Couldn't open " << zipPath;
+        ofLogError("TiltZip") << "Couldn't open " << zipPath;
         return false;
     }
     
     Poco::Zip::Compress c(outfile, true);
     
-    LatkZipArchiveHandler handler;
-    c.EDone += done_handler(&handler, &LatkZipArchiveHandler::onDone);
+    TiltZipArchiveHandler handler;
+    c.EDone += done_handler(&handler, &TiltZipArchiveHandler::onDone);
     
     c.addRecursive(Poco::Path(folderPath), cl, excludeRoot);
     c.close();
-    c.EDone -= done_handler(&handler, &LatkZipArchiveHandler::onDone);
+    c.EDone -= done_handler(&handler, &TiltZipArchiveHandler::onDone);
     
     return handler.isSuccessful;
 }
 
 
 // ----------------------------------------------------------
-bool LatkZip::open(string zipPath) {
+bool TiltZip::open(string zipPath) {
     zipPath = ofToDataPath(zipPath);
-    ofLogNotice("LatkZip") << "Opening " << zipPath;
+    ofLogNotice("TiltZip") << "Opening " << zipPath;
     
     infile.open(zipPath.c_str());
     if (!infile.good()) {
-        ofLogError("LatkZip") << "Couldn't open " << zipPath;
+        ofLogError("TiltZip") << "Couldn't open " << zipPath;
         return false;
     }
     bOpened = true;
@@ -75,10 +75,10 @@ bool LatkZip::open(string zipPath) {
 }
 
 // ----------------------------------------------------------
-vector<string> LatkZip::list() {
+vector<string> TiltZip::list() {
     vector<string> files;
     if (!bOpened) {
-        ofLogWarning("LatkZip") << "Archive not opened";
+        ofLogWarning("TiltZip") << "Archive not opened";
         return files;
     }
     
@@ -90,16 +90,16 @@ vector<string> LatkZip::list() {
         string fname = it->first;
         Poco::Zip::ZipFileInfo info = it->second;
         files.push_back( fname );
-        ofLogNotice("LatkZip") << fname;
+        ofLogNotice("TiltZip") << fname;
     }
     return files;
 }
 
 
 // ----------------------------------------------------------
-ofBuffer LatkZip::getFile(string fileName) {
+ofBuffer TiltZip::getFile(string fileName) {
     if (!bOpened) {
-        ofLogWarning("LatkZip") << "Archive not opened";
+        ofLogWarning("TiltZip") << "Archive not opened";
         return ofBuffer();
     }
     infile.clear() ;
@@ -122,30 +122,30 @@ ofBuffer LatkZip::getFile(string fileName) {
 }
 
 // ----------------------------------------------------------
-bool LatkZip::unzipTo(string destination) {
+bool TiltZip::unzipTo(string destination) {
     destination = ofToDataPath(destination);
     
     if (!bOpened) {
-        ofLogWarning("LatkZip") << "Archive not opened";
+        ofLogWarning("TiltZip") << "Archive not opened";
         return false;
     }
     infile.clear() ;
     infile.seekg(0, ios::beg);
     
-    ofLogNotice("LatkZip") << "Unzipping archive to " << destination;
+    ofLogNotice("TiltZip") << "Unzipping archive to " << destination;
     
     Poco::Path d(destination);
     Poco::Zip::Decompress de(infile, d);
     
-    LatkZipArchiveHandler handler;
+    TiltZipArchiveHandler handler;
     
-    de.EError += error_handler(&handler, &LatkZipArchiveHandler::onError);
-    de.EOk += ok_handler(&handler, &LatkZipArchiveHandler::onOk);
+    de.EError += error_handler(&handler, &TiltZipArchiveHandler::onError);
+    de.EOk += ok_handler(&handler, &TiltZipArchiveHandler::onOk);
     
     de.decompressAllFiles();
     
-    de.EError -= error_handler(&handler, &LatkZipArchiveHandler::onError);
-    de.EOk -= ok_handler(&handler, &LatkZipArchiveHandler::onOk);
+    de.EError -= error_handler(&handler, &TiltZipArchiveHandler::onError);
+    de.EOk -= ok_handler(&handler, &TiltZipArchiveHandler::onOk);
     
     return handler.isSuccessful;
 }

@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 //#include "ofxPostProcessing.h"
-#include "ofxLatk.h"
+#include "ofxTilt.h"
 
 class ofApp : public ofBaseApp {
 

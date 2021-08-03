@@ -1,28 +1,28 @@
-#include "LatkStroke.h"
+#include "TiltStroke.h"
 
-LatkStroke::LatkStroke() { }
+TiltStroke::TiltStroke() { }
 
-LatkStroke::LatkStroke(ofColor c) {
+TiltStroke::TiltStroke(ofColor c) {
     strokeColor = c;
 }
 
-LatkStroke::LatkStroke(float s) {
+TiltStroke::TiltStroke(float s) {
     strokeSize = s;
 }
 
-LatkStroke::LatkStroke(ofColor c, float s) {
+TiltStroke::TiltStroke(ofColor c, float s) {
     strokeColor = c;
     strokeSize = s;
 }
 
-LatkStroke::LatkStroke(vector<ofVec3f> pts, ofColor c) {
+TiltStroke::TiltStroke(vector<ofVec3f> pts, ofColor c) {
 	points = pts;
 	strokeColor = c;
 }
 
-void LatkStroke::update() { }
+void TiltStroke::update() { }
 
-void LatkStroke::draw() {
+void TiltStroke::draw() {
 	glPushMatrix();
 	ofScale(globalScale, globalScale, globalScale);
     ofNoFill();
@@ -59,12 +59,12 @@ void LatkStroke::draw() {
 	glPopMatrix();
 }
 
-void LatkStroke::run() {
+void TiltStroke::run() {
     update();
     draw();
 }
 
-void LatkStroke::splitStroke() {
+void TiltStroke::splitStroke() {
     vector<ofVec3f> newPoints;
     for (int i = 1; i < points.size(); i += 2) {
         ofVec3f center = points[i];
@@ -79,7 +79,7 @@ void LatkStroke::splitStroke() {
     points.assign(newPoints.begin(), newPoints.end());
 }
 
-void LatkStroke::smoothStroke() {
+void TiltStroke::smoothStroke() {
     float weight = 18;
     float scale = 1.0 / (weight + 2);
     int nPointsMinusTwo = points.size() - 2;
@@ -98,7 +98,7 @@ void LatkStroke::smoothStroke() {
     }
 }
 
-void LatkStroke::refine() {
+void TiltStroke::refine() {
     for (int i=0; i<splitReps; i++) {
         splitStroke();
         smoothStroke();

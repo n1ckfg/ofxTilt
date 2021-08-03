@@ -1,15 +1,15 @@
 #pragma once
 #include "ofMain.h"
 
-class LatkStroke {
+class TiltStroke {
     
     public:
-		LatkStroke();
-		LatkStroke(ofColor c);
-		LatkStroke(float s);
-		LatkStroke(ofColor c, float s);
-		LatkStroke(vector<ofVec3f> pts, ofColor c);
-		virtual ~LatkStroke(){};
+        TiltStroke();
+        TiltStroke(ofColor c);
+        TiltStroke(float s);
+        TiltStroke(ofColor c, float s);
+        TiltStroke(vector<ofVec3f> pts, ofColor c);
+		virtual ~TiltStroke(){};
 
         void update();
         void draw();

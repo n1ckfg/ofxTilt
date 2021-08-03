@@ -35,14 +35,14 @@ SOFTWARE.
 #include "ofLog.h"
 #include "ofURLFileLoader.h"
 
-class LatkJson: public Json::Value {
+class TiltJson: public Json::Value {
 
     public:
-        LatkJson();
-        LatkJson(const std::string& jsonString);
-        LatkJson(const Json::Value& v);
+        TiltJson();
+        TiltJson(const std::string& jsonString);
+        TiltJson(const Json::Value& v);
 
-        virtual ~LatkJson();
+        virtual ~TiltJson();
 
         bool parse(const std::string& jsonString);
         bool open(const std::string& filename);

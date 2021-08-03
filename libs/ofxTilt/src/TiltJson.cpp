@@ -28,30 +28,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "LatkJson.h"
+#include "TiltJson.h"
 
-LatkJson::LatkJson() { }
+TiltJson::TiltJson() { }
 
-LatkJson::LatkJson(const Json::Value& v): Json::Value(v) { }
+TiltJson::TiltJson(const Json::Value& v): Json::Value(v) { }
 
-LatkJson::LatkJson(const std::string& jsonString) {
+TiltJson::TiltJson(const std::string& jsonString) {
     parse(jsonString);
 }
 
-LatkJson::~LatkJson() { }
+TiltJson::~TiltJson() { }
 
-bool LatkJson::parse(const std::string& jsonString) {
+bool TiltJson::parse(const std::string& jsonString) {
     Json::Reader reader;
 
     if (!reader.parse( jsonString, *this )) {
-        ofLogError("LatkJson::parse") << "Unable to parse string: " << reader.getFormattedErrorMessages();
+        ofLogError("TiltJson::parse") << "Unable to parse string: " << reader.getFormattedErrorMessages();
         return false;
     }
 
     return true;
 }
 
-bool LatkJson::open(const std::string& filename) {
+bool TiltJson::open(const std::string& filename) {
     if (filename.find("http://") == 0 || filename.find("https://") == 0) {
         return openRemote(filename);
     } else {
@@ -60,13 +60,13 @@ bool LatkJson::open(const std::string& filename) {
 }
 
 
-bool LatkJson::openLocal(const std::string& filename) {
+bool TiltJson::openLocal(const std::string& filename) {
     ofBuffer buffer = ofBufferFromFile(filename);
 
     Json::Reader reader;
 
     if (!reader.parse(buffer.getText(), *this)) {
-        ofLogError("LatkJson::openLocal") << "Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
+        ofLogError("TiltJson::openLocal") << "Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
         return false;
     } else {
         return true;
@@ -74,13 +74,13 @@ bool LatkJson::openLocal(const std::string& filename) {
 }
 
 
-bool LatkJson::openRemote(const std::string& filename) {
+bool TiltJson::openRemote(const std::string& filename) {
     std::string result = ofLoadURL(filename).data.getText();
 
     Json::Reader reader;
 
     if (!reader.parse(result, *this)) {
-        ofLogError("LatkJson::openRemote") << "Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
+        ofLogError("TiltJson::openRemote") << "Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
         return false;
     }
 
@@ -88,11 +88,11 @@ bool LatkJson::openRemote(const std::string& filename) {
 }
 
 
-bool LatkJson::save(const std::string& filename, bool pretty) const {
+bool TiltJson::save(const std::string& filename, bool pretty) const {
     ofFile file;
 
     if (!file.open(filename, ofFile::WriteOnly)) {
-        ofLogError("LatkJson::save") << "Unable to open " << file.getAbsolutePath() << ".";
+        ofLogError("TiltJson::save") << "Unable to open " << file.getAbsolutePath() << ".";
         return false;
     }
 
@@ -104,7 +104,7 @@ bool LatkJson::save(const std::string& filename, bool pretty) const {
         file << writer.write( *this ) << std::endl;
     }
 
-    ofLogVerbose("LatkJson::save") << "JSON saved to " << file.getAbsolutePath() << ".";
+    ofLogVerbose("TiltJson::save") << "JSON saved to " << file.getAbsolutePath() << ".";
 
     file.close();
 
@@ -112,7 +112,7 @@ bool LatkJson::save(const std::string& filename, bool pretty) const {
 }
 
 
-std::string LatkJson::getRawString(bool pretty) const {
+std::string TiltJson::getRawString(bool pretty) const {
     std::string raw;
 
     if (pretty) {
@@ -126,7 +126,7 @@ std::string LatkJson::getRawString(bool pretty) const {
     return raw;
 }
 
-std::string LatkJson::toString(Json::ValueType type) {
+std::string TiltJson::toString(Json::ValueType type) {
     switch (type) {
         case Json::nullValue:
             return "null";
@@ -145,7 +145,7 @@ std::string LatkJson::toString(Json::ValueType type) {
         case Json::objectValue:
             return "object";
         default:
-            ofLogError("LatkJson::toString") << "Unknown Json::ValueType.";
+            ofLogError("TiltJson::toString") << "Unknown Json::ValueType.";
             return "unknown";
     }
 }

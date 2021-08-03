@@ -42,10 +42,10 @@ SOFTWARE.
 #include <Poco/StreamCopier.h>
 
 // ----------------------------------------------------------
-class LatkZip {
+class TiltZip {
 
     public:
-        LatkZip():bOpened(false) { }
+        TiltZip():bOpened(false) { }
         
         bool open(string zipPath);
         vector<string> list();
@@ -66,27 +66,27 @@ typedef std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path> ZipOkIn
 typedef const Poco::Zip::ZipLocalFileHeader ZipDoneInfo;
 
 // ----------------------------------------------------------
-class LatkZipArchiveHandler {
+class TiltZipArchiveHandler {
 
     public:
-        LatkZipArchiveHandler() {
+        TiltZipArchiveHandler() {
             isSuccessful = false;
         }
 
-        ~LatkZipArchiveHandler() { }
+        ~TiltZipArchiveHandler() { }
         
         void onError(const void*, ZipErrorInfo& info) {
-            ofLogError("LatkZip") << "Failed to Unzip: " + info.second;
+            ofLogError("TiltZip") << "Failed to Unzip: " + info.second;
             isSuccessful = false;
         }
         
         void onOk(const void*, ZipOkInfo& info) {
-            ofLogNotice("LatkZip") << "Unzipped: " << info.second.toString();
+            ofLogNotice("TiltZip") << "Unzipped: " << info.second.toString();
             isSuccessful = true;
         }
         
         void onDone(const void*, ZipDoneInfo& header) {
-            ofLogNotice("LatkZip") << "Zipped " << header.getFileName() << " was " << header.getUncompressedSize() << " now " << header.getCompressedSize();
+            ofLogNotice("TiltZip") << "Zipped " << header.getFileName() << " was " << header.getUncompressedSize() << " now " << header.getCompressedSize();
             isSuccessful = true;
         }
         
